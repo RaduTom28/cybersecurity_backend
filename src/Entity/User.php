@@ -2,15 +2,22 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Entity;
-use phpDocumentor\Reflection\Types\Collection;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherAwareInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity()]
-class User implements UserInterface, PasswordHasherAwareInterface
+class User implements UserInterface, PasswordHasherAwareInterface, PasswordAuthenticatedUserInterface
 {
+
+    public function __construct()
+    {
+        $this->movies = new ArrayCollection();
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
