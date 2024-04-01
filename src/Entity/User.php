@@ -32,8 +32,45 @@ class User implements UserInterface, PasswordHasherAwareInterface, PasswordAuthe
     #[Orm\Column]
     private int $funds = 0;
 
+    #[ORM\Column(nullable: true)]
+    private string $firstName ;
+    #[ORM\Column(nullable: true)]
+    private string $lastName ;
+
     #[Orm\ManyToMany(targetEntity: Movie::class, inversedBy: 'users')]
     private Collection $movies;
+
+    /**
+     * @return string
+     */
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param string $firstName
+     */
+    public function setFirstName(string $firstName): void
+    {
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param string $lastName
+     */
+    public function setLastName(string $lastName): void
+    {
+        $this->lastName = $lastName;
+    }
 
     /**
      * @return Collection
@@ -50,7 +87,6 @@ class User implements UserInterface, PasswordHasherAwareInterface, PasswordAuthe
     {
         $this->movies = $movies;
     }
-
 
 
     /**
@@ -104,7 +140,6 @@ class User implements UserInterface, PasswordHasherAwareInterface, PasswordAuthe
         $this->id = $id;
     }
 
-
     /**
      * @return string
      */
@@ -112,7 +147,6 @@ class User implements UserInterface, PasswordHasherAwareInterface, PasswordAuthe
     {
         return $this->password;
     }
-
 
     /**
      * @param string $password

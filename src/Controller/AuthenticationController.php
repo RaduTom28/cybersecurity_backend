@@ -2,24 +2,32 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Service\JwtService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class AuthenticationController extends AbstractController
 {
-    #[Route('/login', name:'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    #[Route('/login', name:'app_login', methods: ['POST'])]
+    public function login(#[CurrentUser] ?User $user, JwtService $jwtService): Response
     {
+        if (null === $user) {
+            return $this->json([
+                'message' => 'missing credentials',
+            ], Response::HTTP_UNAUTHORIZED);
+        }
 
-        $error = $authenticationUtils->getLastAuthenticationError();
-        $lastUsername = $authenticationUtils->getLastUsername();
+        $jwt = $jwtService->generateJwtForUser($user);
 
-          return $this->render('login.html.twig', [
-              'last_username' => $lastUsername,
-              'error'         => $error,
-          ]);
+        return new JsonResponse([
+            'user' => $user->getUserIdentifier(),
+            'token' => $jwt
+        ]);
     }
 
     #[Route(path:'/', name: 'app_home')]

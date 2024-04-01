@@ -16,15 +16,16 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
         main:
-            lazy: true #remove la nevoie
-            form_login:
-                login_path: app_login
+            json_login:
                 check_path: app_login
-                default_target_path: app_home
-            entry_point: form_login
+            access_token:
+                token_handler : App\Security\JwtAccessHandler
+            stateless: true
 
     access_control:
+        - { path: '^/movies', roles: PUBLIC_ACCESS}
         - { path: '^/login', roles: PUBLIC_ACCESS}
         - { path: '^/', roles: IS_AUTHENTICATED_FULLY}
 
