@@ -1,3 +1,3 @@
-composer install
-php bin/console doctrine:schema:update
-php bin/console doctrine:fixtures:load
+composer install <br/>
+php bin/console doctrine:schema:update <br/>
+php bin/console doctrine:fixtures:load <br/>
