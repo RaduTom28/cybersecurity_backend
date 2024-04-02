@@ -22,9 +22,11 @@ security:
                 check_path: app_login
             access_token:
                 token_handler : App\Security\JwtAccessHandler
+                failure_handler: App\Security\JwtAccessFailureHandler
             stateless: true
 
     access_control:
+        - { path: '^/public_key', roles: PUBLIC_ACCESS}
         - { path: '^/movies', roles: PUBLIC_ACCESS}
         - { path: '^/login', roles: PUBLIC_ACCESS}
         - { path: '^/', roles: IS_AUTHENTICATED_FULLY}

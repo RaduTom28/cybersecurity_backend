@@ -6,7 +6,7 @@ use App\Service\JwtService;
 use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use MongoDB\Driver\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\AccessToken\AccessTokenHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use function PHPUnit\Framework\throwException;
@@ -26,7 +26,8 @@ readonly class JwtAccessHandler implements AccessTokenHandlerInterface
                 throw new Exception('expired token');
             }
         }catch (Exception $exception) {
-            throw new AuthenticationException('Token Decoding Failed: '. $exception->getMessage());
+            $additionalMessage = ($exception->getMessage() == 'expired token') ? (': '.$exception->getMessage()) : '';
+            throw new AuthenticationException('Token Decoding Failed'.$additionalMessage);
         }
 
         return new UserBadge($decoded['email']);

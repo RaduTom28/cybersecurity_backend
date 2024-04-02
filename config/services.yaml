@@ -24,3 +24,7 @@ services:
     App\Security\JwtAccessHandler:
         arguments:
             $publicKey: '%app.rsa_public%'
+
+    App\Controller\AuthenticationController:
+        arguments:
+            $publicKey: '%app.rsa_public%'
