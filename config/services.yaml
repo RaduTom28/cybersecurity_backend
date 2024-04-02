@@ -19,6 +19,7 @@ services:
     App\Service\JwtService:
         arguments:
             $privateKey: '%app.rsa_private%'
+            $publicKey: '%app.rsa_public%'
 
     App\Security\JwtAccessHandler:
         arguments:
