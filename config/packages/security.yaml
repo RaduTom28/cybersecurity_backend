@@ -27,7 +27,7 @@ security:
 
     access_control:
         - { path: '^/public_key', roles: PUBLIC_ACCESS}
-        - { path: '^/movies', roles: PUBLIC_ACCESS}
+        - { path: '^/movie/all', roles: PUBLIC_ACCESS}
         - { path: '^/login', roles: PUBLIC_ACCESS}
         - { path: '^/', roles: IS_AUTHENTICATED_FULLY}
 

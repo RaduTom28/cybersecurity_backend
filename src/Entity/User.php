@@ -88,6 +88,10 @@ class User implements UserInterface, PasswordHasherAwareInterface, PasswordAuthe
         $this->movies = $movies;
     }
 
+    public function addMovie(Movie $movie): void
+    {
+        $this->movies[] = $movie;
+    }
 
     /**
      * @return int
