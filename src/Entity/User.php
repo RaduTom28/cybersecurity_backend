@@ -160,6 +160,12 @@ class User implements UserInterface, PasswordHasherAwareInterface, PasswordAuthe
         $this->password = $password;
     }
 
+    public function addFunds(int $addedFunds): void
+    {
+        $this->funds += $addedFunds;
+    }
+
+
 
     public function getRoles(): array
     {
