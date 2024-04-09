@@ -37,7 +37,8 @@ class MovieController extends AbstractController
     public function buyMovie(Request $request,
                              EntityManagerInterface $entityManager,
                              TokenStorageInterface $tokenStorage): Response
-    {   $movieId = $request->request->get('movie_id');
+    {
+        $movieId = $request->request->get('movie_id');
         $data = ['movieId' => $movieId];
 
         $buyMovieRequest = new BuyMovieRequest($entityManager, $tokenStorage);

@@ -26,6 +26,7 @@ security:
             stateless: true
 
     access_control:
+        - { path: '^/user/register', roles: PUBLIC_ACCESS}
         - { path: '^/public_key', roles: PUBLIC_ACCESS}
         - { path: '^/movie/all', roles: PUBLIC_ACCESS}
         - { path: '^/login', roles: PUBLIC_ACCESS}
