@@ -32,6 +32,7 @@ class UserController extends AbstractController
         $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
         $user->addFunds($funds);
 
+        $entityManager->flush();
         return new JsonResponse(['msg' => 'fonduri alocate cu succes']);
 
     }

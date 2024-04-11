@@ -20,12 +20,14 @@ security:
         main:
             json_login:
                 check_path: app_login
+                failure_handler: App\Security\LoginFailureHandler
             access_token:
                 token_handler : App\Security\JwtAccessHandler
                 failure_handler: App\Security\JwtAccessFailureHandler
             stateless: true
 
     access_control:
+        - { path: '^/test', roles: PUBLIC_ACCESS}
         - { path: '^/user/register', roles: PUBLIC_ACCESS}
         - { path: '^/public_key', roles: PUBLIC_ACCESS}
         - { path: '^/movie/all', roles: PUBLIC_ACCESS}

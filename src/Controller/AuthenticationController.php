@@ -21,7 +21,7 @@ class AuthenticationController extends AbstractController
     #[Route('/login', name:'app_login', methods: ['POST'])]
     public function login(#[CurrentUser] ?User $user, JwtService $jwtService): Response
     {
-        if (null === $user) {
+        if (empty($user)) {
             return $this->json([
                 'message' => 'missing credentials',
             ], Response::HTTP_UNAUTHORIZED);
@@ -33,6 +33,7 @@ class AuthenticationController extends AbstractController
             'user' => $user->getUserIdentifier(),
             'token' => $jwt
         ]);
+
     }
 
     #[Route(path:'/public_key', name: 'app_public_key')]
