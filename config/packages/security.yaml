@@ -16,7 +16,14 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
+        public:
+            pattern:
+                - ^/user/my
+        login:
+            pattern: ^/login
+            json_login:
+                check_path: app_login
+                failure_handler: App\Security\LoginFailureHandler
         main:
             json_login:
                 check_path: app_login
@@ -26,12 +33,14 @@ security:
                 failure_handler: App\Security\JwtAccessFailureHandler
             stateless: true
 
+
+
     access_control:
         - { path: '^/test', roles: PUBLIC_ACCESS}
+        - { path: '^/user/my', roles: PUBLIC_ACCESS}
         - { path: '^/user/register', roles: PUBLIC_ACCESS}
         - { path: '^/public_key', roles: PUBLIC_ACCESS}
         - { path: '^/movie/all', roles: PUBLIC_ACCESS}
-        - { path: '^/login', roles: PUBLIC_ACCESS}
         - { path: '^/', roles: IS_AUTHENTICATED_FULLY}
 
 when@test:

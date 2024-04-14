@@ -28,3 +28,7 @@ services:
     App\Controller\AuthenticationController:
         arguments:
             $publicKey: '%app.rsa_public%'
+
+    App\Controller\UserController:
+        arguments:
+            $publicKey: '%app.rsa_public%'

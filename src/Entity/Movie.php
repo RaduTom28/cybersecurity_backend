@@ -23,6 +23,9 @@ class Movie
     #[ORM\Column(nullable: false)]
     private string $title;
 
+    #[ORM\Column(nullable: true)]
+    private string $posterImageUrl;
+
     #[ORM\Column]
     private int $price = 0;
 
@@ -61,8 +64,6 @@ class Movie
         $this->price = $price;
     }
 
-
-
     /**
      * @return string
      */
@@ -95,6 +96,23 @@ class Movie
     {
         $this->id = $id;
     }
+
+    /**
+     * @return string
+     */
+    public function getPosterImageUrl(): string
+    {
+        return $this->posterImageUrl;
+    }
+
+    /**
+     * @param string $posterImageUrl
+     */
+    public function setPosterImageUrl(string $posterImageUrl): void
+    {
+        $this->posterImageUrl = $posterImageUrl;
+    }
+
 
 
 }
