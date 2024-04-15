@@ -30,7 +30,7 @@ class AuthenticationController extends AbstractController
         $jwt = $jwtService->generateJwtForUser($user);
 
         return new JsonResponse([
-            'user' => $user->getUserIdentifier(),
+            'username' => $user->getUserIdentifier(),
             'token' => $jwt
         ]);
 
