@@ -16,7 +16,8 @@ class JwtAccessFailureHandler implements AuthenticationFailureHandlerInterface
         return new JsonResponse(
             [
                 'err' => $exception->getMessage()
-            ]
+            ],
+            Response::HTTP_UNAUTHORIZED
         );
     }
 }
