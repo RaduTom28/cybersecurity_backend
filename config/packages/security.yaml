@@ -41,6 +41,7 @@ security:
         - { path: '^/user/register', roles: PUBLIC_ACCESS}
         - { path: '^/public_key', roles: PUBLIC_ACCESS}
         - { path: '^/movie/all', roles: PUBLIC_ACCESS}
+        - { path: '^/movie/like', roles: PUBLIC_ACCESS}
         - { path: '^/', roles: IS_AUTHENTICATED_FULLY}
 
 when@test:

@@ -19,7 +19,6 @@ class MovieController extends AbstractController
     public function getAllMovies(EntityManagerInterface $entityManager): Response
     {
 
-        
         $movies = $entityManager->getRepository(Movie::class)->findAll();
         $responseData = array();
 
@@ -31,6 +30,25 @@ class MovieController extends AbstractController
         }
             
         return new JsonResponse($responseData);
+    }
+    #[Route(path: '/movie/like', name: 'app_movie_like')]
+    public function findMovieLike(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $param = $request->query->get('title');
+
+        $conn = $entityManager->getConnection();
+
+
+        $sql = '
+            SELECT * FROM movie m 
+            WHERE title LIKE "%'. $param . '%";';
+
+        $resultSet = $conn->executeQuery($sql);
+        $res = $resultSet->fetchAllAssociative();
+
+        dd($res);
+
+        return new JsonResponse($res);
     }
 
     #[Route(path:'/movie/buy', name: 'app_movie_buy', methods: ['POST'])]
