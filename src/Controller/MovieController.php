@@ -24,6 +24,7 @@ class MovieController extends AbstractController
 
         foreach ($movies as $movie) {
             $responseData[] = [
+                'id' => $movie->getId(),
                 'title' => $movie->getTitle(),
                 'price' => $movie->getPrice()
             ];
@@ -90,6 +91,7 @@ class MovieController extends AbstractController
 
         foreach ($collection as $movie) {
             $responseData[] = [
+                'id' => $movie->getId(),
                 'title' => $movie->getTitle(),
                 'price' => $movie->getPrice()
             ];
