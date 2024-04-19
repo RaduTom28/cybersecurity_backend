@@ -47,7 +47,7 @@ class MovieController extends AbstractController
         $resultSet = $conn->executeQuery($sql);
         $res = $resultSet->fetchAllAssociative();
 
-        dd($res);
+        //dd($res);
 
         return new JsonResponse($res);
     }
