@@ -26,7 +26,8 @@ class MovieController extends AbstractController
             $responseData[] = [
                 'id' => $movie->getId(),
                 'title' => $movie->getTitle(),
-                'price' => $movie->getPrice()
+                'price' => $movie->getPrice(),
+                'poster_image_url' => $movie->getPosterImageUrl()
             ];
         }
             
@@ -93,7 +94,8 @@ class MovieController extends AbstractController
             $responseData[] = [
                 'id' => $movie->getId(),
                 'title' => $movie->getTitle(),
-                'price' => $movie->getPrice()
+                'price' => $movie->getPrice(),
+                'poster_image_url' => $movie->getPosterImageUrl()
             ];
         }
 
