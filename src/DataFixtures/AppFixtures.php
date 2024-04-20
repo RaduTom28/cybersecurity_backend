@@ -39,15 +39,18 @@ class AppFixtures extends Fixture
         $movieData = [
             [
                 'title' => 'Titanic',
-                'price' => 20
+                'price' => 20,
+                'poster_image_url' => '/images/titanic.jpg'
             ],
             [
                 'title' => 'Whiplash',
-                'price' => 30
+                'price' => 30,
+                'poster_image_url' => '/images/whiplash.jpg'
             ],
             [
                 'title' => 'Avengers:Endgame',
-                'price' => 40
+                'price' => 40,
+                'poster_image_url' => '/images/endgame.jpg'
             ]
         ];
 
@@ -67,6 +70,7 @@ class AppFixtures extends Fixture
             $movie = new Movie();
             $movie->setTitle($data['title']);
             $movie->setPrice($data['price']);
+            $movie->setPosterImageUrl($data['poster_image_url']);
             $manager->persist($movie);
         }
         

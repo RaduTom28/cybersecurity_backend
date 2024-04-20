@@ -2,12 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Request\ProfilePicUploadRequest;
 use App\Entity\Request\RegisterUserRequest;
 use App\Entity\User;
+use App\Form\Type\ProfilePicUploadRequestType;
 use App\Form\Type\RegisterUserRequestType;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use phpDocumentor\Reflection\File;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -111,16 +115,39 @@ class UserController extends AbstractController
             SELECT * FROM user u
             WHERE email = '". $decoded['email'] ."';";
 
-
             $resultSet = $conn->executeQuery($sql);
             $res = $resultSet->fetchAllAssociative();
             return new JsonResponse($res);
         } catch (\Exception $e) {
             Return new JsonResponse(['err' => $e->getMessage()]);
         }
+    }
 
+    #[Route(path: '/user/profile_pic/upload', name: 'app_profile_pic_upload', methods: ['POST'])]
+    public function uploadProfilePic(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager): Response
+    {
+        $file = $request->files->get('profile_pic');
+        if (empty($file)) {
+            return new JsonResponse(['err' => 'No file provided']);
+        }
+
+        $form = $this->createForm(ProfilePicUploadRequestType::class, new ProfilePicUploadRequest());
+        $form->submit(['profile_pic' => $file]);
+
+        if($form->isValid()) {
+
+            $fileName = $fileUploader->upload($form->get('profile_pic')->getData());
+
+            $loggedUserEmail = $this->getUser()->getUserIdentifier();
+            $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $loggedUserEmail]);
+            $user->setProfilePictureUrl($fileName);
+            $entityManager->flush();
+
+            return new JsonResponse(['msg' => 'Upload success !']);
+        }
+
+        return new JsonResponse(['err' => $form->getErrors(true)->current()->getMessage()]);
 
 
     }
-
 }
