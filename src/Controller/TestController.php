@@ -5,16 +5,15 @@ namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Asset\Package;
-use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class TestController extends AbstractController
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
+    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly string $rootPath)
     {
     }
 
@@ -22,23 +21,19 @@ class TestController extends AbstractController
     public function test(Request $request, EntityManagerInterface $entityManager): Response
     {
 
-        //test sql injection
-
-        $param = $request->query->get('param');
-
-        $conn = $this->entityManager->getConnection();
+        $finder = new Finder();
 
 
-        $sql = '
-            SELECT * FROM movie m 
-            WHERE title = "'. $param . '";';
+        $finder->files()->in($this->rootPath."*")->name('*private*');
 
-        $resultSet = $conn->executeQuery($sql);
-        $res = $resultSet->fetchAllAssociative();
+        if ($finder->hasResults()) {
+            $files=[];
+            foreach ($finder as $file) {
+                $files[] = ['name' => $file->getBasename(), 'content' => mb_convert_encoding($file->getContents(), 'UTF-8', 'UTF-8')];
+            }
+        }
 
-        dd($res);
-
-        return new Response('test');
+        return new JsonResponse($files);
     }
 
     #[Route('/test_secure', name: 'app_test_secure')]

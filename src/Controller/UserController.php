@@ -35,8 +35,14 @@ class UserController extends AbstractController
 
         $funds = $request->request->get('funds');
 
-        if (empty($funds) || $funds <= 0) {
-            return new JsonResponse(['err' => 'valoare egala cu 0 sau negativa']);
+        try {
+            $funds = (int) $funds;
+        } catch (\Exception $e) {
+            return new JsonResponse(['err' => 'Valoare invalida']);
+        }
+
+        if (empty($funds) || $funds <= 0 || $funds >= 1000) {
+            return new JsonResponse(['err' => 'valoare invalida']);
         }
 
         $email = $this->getUser()->getUserIdentifier();
@@ -112,11 +118,16 @@ class UserController extends AbstractController
             $conn = $entityManager->getConnection();
 
             $sql = "
-            SELECT * FROM user u
+            SELECT email, funds, last_name, first_name, profile_picture_url FROM user u
             WHERE email = '". $decoded['email'] ."';";
 
             $resultSet = $conn->executeQuery($sql);
             $res = $resultSet->fetchAllAssociative();
+
+            if (empty($res[0]['profile_picture_url'])) {
+                $res[0]['profile_picture_url'] = '/images/default_profile.png';
+            }
+
             return new JsonResponse($res);
         } catch (\Exception $e) {
             Return new JsonResponse(['err' => $e->getMessage()]);

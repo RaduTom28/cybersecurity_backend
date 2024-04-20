@@ -2,6 +2,7 @@ parameters:
     app.rsa_public: '%env(file:resolve:RSA_PUBLIC_PATH)%'
     app.rsa_private: '%env(file:resolve:RSA_PRIVATE_PATH)%'
     images_directory: '%kernel.project_dir%/public/images'
+    root_path: '%kernel.project_dir%'
 
 services:
 
@@ -37,3 +38,7 @@ services:
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%images_directory%'
+
+    App\Controller\TestController:
+        arguments:
+            $rootPath: '%kernel.project_dir%'
