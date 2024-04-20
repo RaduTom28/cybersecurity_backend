@@ -95,7 +95,7 @@ class UserController extends AbstractController
         $authHeader = $request->headers->get('Authorization');
 
         if (empty($authHeader)) {
-            return new JsonResponse(['err' => 'No Auhtorization header provided']);
+            return new JsonResponse(['err' => 'No Auhtorization header provided'], Response::HTTP_UNAUTHORIZED);
         }
 
         $splitHeader = explode(" ",$authHeader);
