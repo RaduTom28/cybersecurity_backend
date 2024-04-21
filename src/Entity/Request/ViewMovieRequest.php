@@ -21,6 +21,7 @@ class ViewMovieRequest
     }
 
     #[Assert\NotBlank]
+    #[Assert\Type(type: "integer")]
     private int $movieId;
 
     #[Assert\Callback]

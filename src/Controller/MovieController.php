@@ -89,6 +89,7 @@ class MovieController extends AbstractController
     public function viewMovie(Request $request, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
     {
         $data = ['movieId' => $request->query->get('movie_id')];
+
         $viewMovieRequest = new ViewMovieRequest($entityManager, $tokenStorage);
         $form = $this->createForm(ViewMovieRequestType::class, $viewMovieRequest);
 
