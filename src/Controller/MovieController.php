@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Movie;
 use App\Entity\Request\BuyMovieRequest;
+use App\Entity\Request\ViewMovieRequest;
 use App\Form\Type\BuyMovieRequestType;
+use App\Form\Type\ViewMovieRequestType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -51,6 +53,22 @@ class MovieController extends AbstractController
         //dd($res);
 
         return new JsonResponse($res);
+    }
+
+    #[Route(path:'/movie/view', name: 'app_movie_view')]
+    public function viewMovie(Request $request, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
+    {
+        $data = ['movieId' => $request->query->get('movie_id')];
+        $viewMovieRequest = new ViewMovieRequest($entityManager, $tokenStorage);
+        $form = $this->createForm(ViewMovieRequestType::class, $viewMovieRequest);
+
+        $form->submit($data);
+
+        if (!$form->isValid()) {
+            return new JsonResponse(['err' => 'Film invalid']);
+        } else {
+            return new JsonResponse(['msg' => 'Vizionare placuta']);
+        }
     }
 
     #[Route(path:'/movie/buy', name: 'app_movie_buy', methods: ['POST'])]

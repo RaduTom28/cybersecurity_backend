@@ -46,6 +46,7 @@ class AuthenticationController extends AbstractController
     public function home(): Response
     {
         $user = $this->getUser();
+
         return new JsonResponse(
             [
                 'email' => $user->getEmail(),
