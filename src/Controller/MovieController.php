@@ -88,7 +88,8 @@ class MovieController extends AbstractController
     #[Route(path:'/movie/view', name: 'app_movie_view')]
     public function viewMovie(Request $request, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
     {
-        $data = ['movieId' => $request->query->get('movie_id')];
+        $movieId = $request->query->get('movie_id');
+        $data = ['movieId' => $movieId];
 
         $viewMovieRequest = new ViewMovieRequest($entityManager, $tokenStorage);
         $form = $this->createForm(ViewMovieRequestType::class, $viewMovieRequest);
@@ -98,7 +99,12 @@ class MovieController extends AbstractController
         if (!$form->isValid()) {
             return new JsonResponse(['err' => 'Film invalid']);
         } else {
-            return new JsonResponse(['msg' => 'Vizionare placuta']);
+            $movie = $entityManager->getRepository(Movie::class)->find($movieId);
+            return new JsonResponse(
+                [
+                    'msg' => 'Vizionare placuta',
+                    'title' => $movie->getTitle()
+                ]);
         }
     }
 
