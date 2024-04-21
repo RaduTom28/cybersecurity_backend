@@ -13,6 +13,7 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use phpDocumentor\Reflection\File;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -146,8 +147,11 @@ class UserController extends AbstractController
         $form->submit(['profile_pic' => $file]);
 
         if($form->isValid()) {
-
-            $fileName = $fileUploader->upload($form->get('profile_pic')->getData());
+            try {
+                $fileName = $fileUploader->upload($form->get('profile_pic')->getData());
+            } catch (FileException $exception){
+                return new JsonResponse(['err' => 'fisierul nu a putut fi uploadat']);
+            }
 
             $loggedUserEmail = $this->getUser()->getUserIdentifier();
             $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $loggedUserEmail]);

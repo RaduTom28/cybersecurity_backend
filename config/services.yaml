@@ -42,3 +42,7 @@ services:
     App\Controller\TestController:
         arguments:
             $rootPath: '%kernel.project_dir%'
+
+    App\Service\ImageLocatorService:
+        arguments:
+            $rootPath: '%root_path%'

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Movie;
 use App\Entity\Request\BuyMovieRequest;
 use App\Entity\Request\ViewMovieRequest;
+use App\Entity\User;
 use App\Form\Type\BuyMovieRequestType;
 use App\Form\Type\ViewMovieRequestType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,6 +18,10 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class MovieController extends AbstractController
 {
+    public function __construct(private readonly EntityManagerInterface $entityManager)
+    {
+    }
+
     #[Route(path:'/movie/all', name: 'app_movies')]
     public function getAllMovies(EntityManagerInterface $entityManager): Response
     {
@@ -53,6 +58,31 @@ class MovieController extends AbstractController
         //dd($res);
 
         return new JsonResponse($res);
+    }
+
+    #[Route(path: '/movie/owned/like', name: 'app_movie_owned_like')]
+    public function findOwnedMovieLike(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $param = $request->query->get('title');
+
+        $email = $this->getUser()->getUserIdentifier();
+        $loggedUser = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+        $ownedMovies = $loggedUser->getMovies();
+
+        $movies = [];
+
+        foreach ($ownedMovies as $movie) {
+            if (str_contains($movie->getTitle(), $param)) {
+                $movies [] = [
+                    'id' => $movie->getId(),
+                    'title' => $movie->getTitle(),
+                    'price' => $movie->getPrice(),
+                    'poster_image_url' => $movie->getPosterImageUrl()
+                ];
+            }
+        }
+
+        return new JsonResponse($movies);
     }
 
     #[Route(path:'/movie/view', name: 'app_movie_view')]

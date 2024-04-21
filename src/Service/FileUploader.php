@@ -4,6 +4,7 @@ namespace App\Service;
 
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 readonly class FileUploader
@@ -11,6 +12,7 @@ readonly class FileUploader
     public function __construct(
         private string $targetDirectory,
         private SluggerInterface $slugger,
+
     ) {
     }
 
@@ -18,13 +20,9 @@ readonly class FileUploader
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $this->slugger->slug($originalFilename);
-        $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+        $fileName = $safeFilename.$file->guessExtension();
 
-        try {
-            $file->move($this->getTargetDirectory(), $fileName);
-        } catch (FileException $e) {
-            //Todo: de completat candva
-        }
+        $file->move($this->getTargetDirectory(), $fileName);
 
         return $fileName;
     }
