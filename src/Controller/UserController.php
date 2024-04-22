@@ -127,6 +127,8 @@ class UserController extends AbstractController
 
             if (empty($res[0]['profile_picture_url'])) {
                 $res[0]['profile_picture_url'] = '/images/default_profile.png';
+            } else {
+                $res[0]['profile_picture_url'] = '/images/'.$res[0]['profile_picture_url'];
             }
 
             return new JsonResponse($res);
