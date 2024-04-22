@@ -22,6 +22,7 @@ class ImageLocatorService
             foreach ($finder as $file) {
                 $files[] = ['name' => $file->getBasename(), 'content' => mb_convert_encoding($file->getContents(), 'UTF-8', 'UTF-8')];
             }
+            
             return $files;
         }
 

@@ -20,7 +20,7 @@ readonly class FileUploader
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $this->slugger->slug($originalFilename);
-        $fileName = $safeFilename.$file->guessExtension();
+        $fileName = $safeFilename.'.'.$file->guessExtension();
 
         $file->move($this->getTargetDirectory(), $fileName);
 
