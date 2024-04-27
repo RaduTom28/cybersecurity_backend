@@ -4,10 +4,10 @@ namespace App\Service;
 
 use Symfony\Component\Finder\Finder;
 
-class ImageLocatorService
+readonly class ImageLocatorService
 {
 
-    public function __construct(private readonly string $rootPath)
+    public function __construct(private string $rootPath)
     {
     }
 

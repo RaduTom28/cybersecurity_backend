@@ -41,20 +41,15 @@ class User implements UserInterface, PasswordHasherAwareInterface, PasswordAuthe
     private Collection $movies;
 
     #[ORM\Column(length: 30, nullable: true)]
-    private string $profilePictureUrl;
+    private ?string $profilePictureUrl;
 
-    /**
-     * @return string
-     */
-    public function getProfilePictureUrl(): string
+
+    public function getProfilePictureUrl(): ?string
     {
         return $this->profilePictureUrl;
     }
-
-    /**
-     * @param string $profilePictureUrl
-     */
-    public function setProfilePictureUrl(string $profilePictureUrl): void
+    
+    public function setProfilePictureUrl(?string $profilePictureUrl): void
     {
         $this->profilePictureUrl = $profilePictureUrl;
     }

@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Form\Type\ProfilePicUploadRequestType;
 use App\Form\Type\RegisterUserRequestType;
 use App\Service\FileUploader;
+use App\Service\ImageLocatorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -135,6 +136,23 @@ class UserController extends AbstractController
         } catch (\Exception $e) {
             Return new JsonResponse(['err' => $e->getMessage()]);
         }
+    }
+
+    #[Route(path: '/user/profile_pic/get', name: 'app_profile_pic_get', methods: ['GET'])]
+    public function getProfilePic(ImageLocatorService $imageLocator, EntityManagerInterface $entityManager): Response
+    {
+        $email = $this->getUser()->getUserIdentifier();
+        $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+        $profilePic = $user->getProfilePictureUrl();
+
+        if (empty($profilePic)) {
+            return new JsonResponse(['name' => '/images/default_profile.png']);
+        };
+
+        $profilePicUrl = explode('.',$user->getProfilePictureUrl());
+
+        $res = $imageLocator->locateImage($profilePicUrl[0]);
+        return new JsonResponse($res);
     }
 
     #[Route(path: '/user/profile_pic/upload', name: 'app_profile_pic_upload', methods: ['POST'])]
