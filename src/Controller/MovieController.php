@@ -72,7 +72,7 @@ class MovieController extends AbstractController
         $movies = [];
 
         foreach ($ownedMovies as $movie) {
-            if (str_contains($movie->getTitle(), $param)) {
+            if (str_contains(strtolower($movie->getTitle()), strtolower($param))) {
                 $movies [] = [
                     'id' => $movie->getId(),
                     'title' => $movie->getTitle(),
