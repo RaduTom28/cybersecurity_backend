@@ -12,7 +12,7 @@ readonly class FileUploader
     public function __construct(
         private string $targetDirectory,
         private SluggerInterface $slugger,
-
+        private readonly ImageLocatorService $imageLocator
     ) {
     }
 
@@ -21,6 +21,12 @@ readonly class FileUploader
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $this->slugger->slug($originalFilename);
         $fileName = $safeFilename.'.'.$file->guessExtension();
+
+        $foundFiles = $this->imageLocator->locateImage($fileName);
+
+        if (!empty($foundFiles)) {
+            $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+        }
 
         $file->move($this->getTargetDirectory(), $fileName);
 
