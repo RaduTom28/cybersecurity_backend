@@ -25,7 +25,7 @@ readonly class JwtService
             'last_name' => $user->getLastName(),
             'funds' => $user->getFunds(),
             'created_at' => time(),
-            'expires_in' => 300
+            'expires_in' => 14400
         ];
 
         return JWT::encode($payload, $privateKey, 'RS256');
